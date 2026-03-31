@@ -1,0 +1,9 @@
+  [{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.bnpteam.android",
+      "sha256_cert_fingerprints":
+      ["02:27:59:B0:97:55:CE:01:7F:AA:EC:4C:CF:04:FE:37:63:FB:92:1A:60:AC:6D:1A:80:23:63:EF:BC:66:93:3E"]
+    }
+  }]

@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "1065285740385",
+    "project_id": "my-baramati",
+    "storage_bucket": "my-baramati.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065285740385:android:a8b4030a4a326abad88720",
+        "android_client_info": {
+          "package_name": "com.android.bnpteam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJUnZ_S1VdnJGlMyC2g_1DtJ4QH1AfTZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065285740385:android:482143f43c6ed984d88720",
+        "android_client_info": {
+          "package_name": "com.bnpteam.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJUnZ_S1VdnJGlMyC2g_1DtJ4QH1AfTZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065285740385:android:a96572723be19b01d88720",
+        "android_client_info": {
+          "package_name": "com.deepmindsit.mybnpcare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJUnZ_S1VdnJGlMyC2g_1DtJ4QH1AfTZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
