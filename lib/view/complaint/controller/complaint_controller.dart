@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bnpteam/utils/exported_path.dart';
 import 'package:intl/intl.dart';
 
@@ -120,15 +122,10 @@ class ComplaintController extends GetxController {
     final userId = await LocalStorage.getString('user_id') ?? '';
     try {
       final res = await _apiService.getComplaintDetails(userId, complaintId);
+      log(res['data'][0].toString());
       if (res['common']['status'] == true) {
         complaintDetails.value = res['data'][0] ?? {};
       }
-      // else {
-      //   showToastNormal(
-      //     // res['common']['message'] ??
-      //         'Something went wrong. Please try again later.',
-      //   );
-      // }
     } catch (e) {
       showToastNormal('Something went wrong. Please try again later.');
       // debugPrint("Login error: $e");

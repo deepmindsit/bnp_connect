@@ -113,7 +113,22 @@ class UpdateHistoryList extends StatelessWidget {
                       ),
                   ],
                 ),
-
+                if (record['department_updated'] == '1')
+                  Container(
+                    padding: EdgeInsets.all(4.r),
+                    margin: EdgeInsets.all(4.r),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                    child: CustomText(
+                      title: '${record['update_details'] ?? ''}',
+                      fontSize: 11.sp,
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      color: Colors.white,
+                    ),
+                  ),
                 // Remark Box
                 SizedBox(height: 10.h),
                 Container(
