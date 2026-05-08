@@ -47,6 +47,7 @@ abstract class ApiService {
   @MultiPart()
   Future<dynamic> addComplaintComment(
     @Part(name: "user_id") String userId,
+    @Part(name: "deadline_days") String deadlineDays,
     @Part(name: "complaint_id") String complaintId,
     @Part(name: "status_id") String statusId,
     @Part(name: "field_officer_id") String officerId,

@@ -51,11 +51,10 @@ class _TaskDetailsState extends State<TaskDetails>
               physics: const BouncingScrollPhysics(),
               children: AnimationConfiguration.toStaggeredList(
                 duration: const Duration(milliseconds: 375),
-                childAnimationBuilder:
-                    (widget) => SlideAnimation(
-                      verticalOffset: 50.0,
-                      child: FadeInAnimation(child: widget),
-                    ),
+                childAnimationBuilder: (widget) => SlideAnimation(
+                  verticalOffset: 50.0,
+                  child: FadeInAnimation(child: widget),
+                ),
                 children: [
                   // 📋 Main Task Card
                   _buildMainTaskCard(details),
@@ -215,10 +214,9 @@ class _TaskDetailsState extends State<TaskDetails>
                 value: details['assignee'] ?? '-',
                 valueStyle: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color:
-                      details['assignee'] == null
-                          ? Colors.grey
-                          : Colors.grey.shade800,
+                  color: details['assignee'] == null
+                      ? Colors.grey
+                      : Colors.grey.shade800,
                 ),
               ),
 
@@ -252,10 +250,9 @@ class _TaskDetailsState extends State<TaskDetails>
                       value: details['last_date'] ?? '-',
                       isCompact: true,
                       valueStyle: TextStyle(
-                        color:
-                            isDeadlinePassed(details['last_date'])
-                                ? Colors.red.shade600
-                                : Colors.grey.shade800,
+                        color: isDeadlinePassed(details['last_date'])
+                            ? Colors.red.shade600
+                            : Colors.grey.shade800,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

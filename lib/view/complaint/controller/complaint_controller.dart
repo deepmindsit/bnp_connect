@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:bnpteam/utils/exported_path.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +19,7 @@ class ComplaintController extends GetxController {
   //update Complaint
   final formKey = GlobalKey<FormState>();
   final descriptionController = TextEditingController();
+  final deadline = TextEditingController();
   final selectedDepartment = RxnString();
   final selectedStatus = RxnString();
   final selectedFilterStatus = RxnString();
@@ -40,6 +41,7 @@ class ComplaintController extends GetxController {
   final showHODError = false.obs;
   final showWardError = false.obs;
   final showDepartmentError = false.obs;
+  RxString estimatedDate = ''.obs;
 
   /// Fetches getComplaintInitial
   Future<void> getComplaintInitial({bool showLoading = true}) async {
@@ -67,6 +69,19 @@ class ComplaintController extends GetxController {
     } finally {
       if (showLoading) isLoading.value = false;
     }
+  }
+
+  void calculateEstimatedDate() {
+    if (deadline.text.isEmpty) {
+      estimatedDate.value = '';
+      return;
+    }
+
+    int days = int.tryParse(deadline.text) ?? 0;
+
+    DateTime estimated = DateTime.now().add(Duration(days: days));
+
+    estimatedDate.value = DateFormat('dd MMM yyyy').format(estimated);
   }
 
   /// Fetches getComplaintLoadMore
@@ -122,7 +137,7 @@ class ComplaintController extends GetxController {
     final userId = await LocalStorage.getString('user_id') ?? '';
     try {
       final res = await _apiService.getComplaintDetails(userId, complaintId);
-      log(res['data'][0].toString());
+      // log(res['data'][0].toString());
       if (res['common']['status'] == true) {
         complaintDetails.value = res['data'][0] ?? {};
       }
@@ -141,6 +156,7 @@ class ComplaintController extends GetxController {
       final docs = await prepareDocuments(newAttachments);
       final res = await _apiService.addComplaintComment(
         userId,
+        deadline.text.trim(),
         complaintId,
         selectedStatus.value!,
         selectedFieldOfficer.value.toString(),
@@ -211,6 +227,8 @@ class ComplaintController extends GetxController {
   }
 
   void setInitialData() {
+    estimatedDate.value = '';
+    deadline.clear();
     selectedDepartment.value =
         complaintDetails['department_id']?.toString() ?? '';
     selectedStatus.value = complaintDetails['status_id']?.toString();

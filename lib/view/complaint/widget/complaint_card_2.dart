@@ -8,6 +8,7 @@ class ComplaintCard2 extends StatelessWidget {
   final String statusColor;
   final String ticketNo;
   final String source;
+  final dynamic data;
 
   const ComplaintCard2({
     super.key,
@@ -18,6 +19,7 @@ class ComplaintCard2 extends StatelessWidget {
     required this.statusColor,
     required this.ticketNo,
     required this.source,
+    required this.data,
   });
 
   @override
@@ -41,6 +43,7 @@ class ComplaintCard2 extends StatelessWidget {
                   _buildLocationSection(),
                   // SizedBox(height: 16.h),
                   _buildFooter(),
+                  _buildTimeLine(data),
                 ],
               ),
             ),
@@ -242,7 +245,7 @@ class ComplaintCard2 extends StatelessWidget {
         ),
         if (status == 'Pending' || status == 'Inprogress')
           LoadingAnimatedButton(
-            height: 30,
+            height: 30.h,
             borderWidth: 5,
             color: Color(
               int.tryParse(statusColor) ?? 0xFF898989,
@@ -253,17 +256,78 @@ class ComplaintCard2 extends StatelessWidget {
               color: Colors.grey.shade600,
             ),
             onTap: () {},
-          )
-        // HighlightAnimatedText(
-        //   text: getRelativeDate(date),
-        //   color: Color(int.tryParse(statusColor) ?? 0xFF898989),
-        // )
-        else
-          CustomText(
-            title: getRelativeDate(date),
-            fontSize: 12.sp,
-            color: Colors.grey.shade600,
           ),
+        // else
+        //   CustomText(title: date, fontSize: 12.sp, color: Colors.grey.shade600),
+      ],
+    );
+  }
+
+  Widget _buildTimeLine(dynamic data) {
+    final fileDate = data['created_on'];
+    final lastDate = data['deadline_date'];
+    final dueSoon = lastDate.toString().isNotEmpty
+        ? isDueSoon(lastDate)
+        : false;
+    if (lastDate.toString().isEmpty) return SizedBox();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.calendar_month_rounded,
+              size: 16.sp,
+              color: Colors.grey.shade500,
+            ),
+            SizedBox(width: 8.w),
+            Expanded(
+              child: Text(
+                'Timeline',
+                style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500),
+              ),
+            ),
+            TranslatedText(
+              title: deadlineLabel2(lastDate),
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: deadlineLabel2(lastDate).contains('Expired')
+                    ? Colors.red
+                    : Colors.green,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 8.h),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4.r),
+          child: LinearProgressIndicator(
+            value: calculateTimelineProgress2(fileDate, lastDate),
+            minHeight: 6.h,
+            backgroundColor: Colors.grey.shade300,
+            color: getTimelineColor(fileDate, lastDate),
+          ),
+        ),
+        SizedBox(height: 4.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // SizedBox(),
+            Text(
+              formatDate(fileDate),
+              style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade500),
+            ),
+            Text(
+              formatDate(lastDate),
+              style: TextStyle(
+                fontSize: 11.sp,
+                color: dueSoon ? Colors.red : Colors.grey.shade500,
+                fontWeight: dueSoon ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

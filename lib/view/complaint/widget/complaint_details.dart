@@ -309,7 +309,64 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           label: "Source",
           value: controller.complaintDetails['source']?.toString() ?? 'N/A',
         ),
+        if (controller.complaintDetails['deadline_date'].toString().isNotEmpty)
+          _buildDetailItem(
+            icon: HugeIcons.strokeRoundedTime02,
+            label: "Deadline",
+            value:
+                controller.complaintDetails['deadline_date']?.toString() ??
+                'N/A',
+          ),
+        if (controller.complaintDetails['deadline_date'].toString().isNotEmpty)
+          _deadlineStatus(),
       ],
+    );
+  }
+
+  Widget _deadlineStatus() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        children: [
+          HugeIcon(
+            icon: HugeIcons.strokeRoundedTime02,
+            size: 20.w,
+            color: Colors.grey,
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TranslatedText(
+                  title: 'DeadLine Status',
+                  textAlign: TextAlign.start,
+                  fontSize: 12.sp,
+                  maxLines: 2,
+                  color: Colors.grey.shade600,
+                ),
+                SizedBox(height: 2.h),
+                TranslatedText(
+                  title: deadlineLabel2(
+                    controller.complaintDetails['deadline_date']?.toString(),
+                  ),
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color:
+                        deadlineLabel2(
+                          controller.complaintDetails['deadline_date']
+                              ?.toString(),
+                        ).contains('Expired')
+                        ? Colors.red
+                        : Colors.green,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

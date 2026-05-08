@@ -172,6 +172,7 @@ class _ApiService implements ApiService {
   @override
   Future<dynamic> addComplaintComment(
     String userId,
+    String deadlineDays,
     String complaintId,
     String statusId,
     String officerId,
@@ -186,6 +187,7 @@ class _ApiService implements ApiService {
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('user_id', userId));
+    _data.fields.add(MapEntry('deadline_days', deadlineDays));
     _data.fields.add(MapEntry('complaint_id', complaintId));
     _data.fields.add(MapEntry('status_id', statusId));
     _data.fields.add(MapEntry('field_officer_id', officerId));

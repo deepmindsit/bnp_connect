@@ -11,6 +11,7 @@ Widget buildTextField({
   int? maxLines = 1,
   Color? fillColor = Colors.white,
   TextInputType? keyboardType = TextInputType.text,
+  List<TextInputFormatter>? inputFormatters,
 }) {
   return TextFormField(
     maxLines: maxLines,
@@ -21,6 +22,7 @@ Widget buildTextField({
     autovalidateMode: AutovalidateMode.onUserInteraction,
     validator: validator,
     obscureText: obscureText!,
+    inputFormatters: inputFormatters,
     cursorColor: Theme.of(Get.context!).textTheme.titleSmall!.color,
     decoration: inputDecoration(
       hintText: hintText,
@@ -76,10 +78,14 @@ Widget buildLabel(
             fontWeight: FontWeight.bold,
             color: Theme.of(Get.context!).textTheme.bodyMedium!.color,
           ),
-          children:
-              isRequired
-                  ? [TextSpan(text: ' *', style: TextStyle(color: Colors.red))]
-                  : [],
+          children: isRequired
+              ? [
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ]
+              : [],
         ),
       ),
     ),

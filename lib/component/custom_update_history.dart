@@ -113,6 +113,24 @@ class UpdateHistoryList extends StatelessWidget {
                       ),
                   ],
                 ),
+                if (record['updated_deadline_date'].toString().isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.all(4.r),
+                    margin: EdgeInsets.all(4.r),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                    child: CustomText(
+                      title:
+                          'Updated Deadline Date : ${record['updated_deadline_date'] ?? ''}',
+                      fontSize: 11.sp,
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      color: Colors.white,
+                    ),
+                  ),
+
                 if (record['department_updated'] == '1')
                   Container(
                     padding: EdgeInsets.all(4.r),

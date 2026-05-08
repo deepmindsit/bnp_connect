@@ -16,6 +16,10 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
       _fetchInitialData();
     });
     super.initState();
+
+    controller.deadline.addListener(() {
+      controller.calculateEstimatedDate();
+    });
   }
 
   void _fetchInitialData() async {
@@ -59,6 +63,7 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                       children: [
                         _buildLabel('Description'.tr),
                         _buildDescriptionField(),
+                        _buildDeadlineField(),
                         SizedBox(height: 12.h),
                         _buildDepartment(),
                         SizedBox(height: 12.h),
@@ -93,6 +98,44 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
           value!.isEmpty ? 'Please Enter Description'.tr : null,
       hintText: 'Enter Your Description'.tr,
     );
+  }
+
+  Widget _buildDeadlineField() {
+    final rollId = getIt<UserService>().rollId.value;
+
+    return rollId == '4'
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 12.h),
+              _buildLabel('Deadline (In Days)'.tr),
+              buildTextField(
+                maxLines: 1,
+                keyboardType: TextInputType.number,
+                controller: controller.deadline,
+                validator: (v) => null,
+                hintText: 'Enter deadline'.tr,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
+                ],
+              ),
+              if (controller.estimatedDate.value.isNotEmpty)
+                const SizedBox(height: 4),
+              Obx(
+                () => controller.estimatedDate.value.isEmpty
+                    ? const SizedBox()
+                    : Text(
+                        'Estimated Date: ${controller.estimatedDate.value}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+              ),
+            ],
+          )
+        : SizedBox();
   }
 
   Widget _buildDepartment() {

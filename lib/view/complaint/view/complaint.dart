@@ -89,6 +89,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                             arguments: {'id': ticket['id'].toString()},
                           ),
                           child: ComplaintCard2(
+                            data: ticket,
                             title: ticket['department'] ?? 'N/A',
                             location: ticket['ward']?.toString() ?? 'N/A',
                             date: ticket['created_on'] ?? 'N/A',

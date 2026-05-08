@@ -259,48 +259,83 @@ Color getFileTypeColor(String extension) {
 bool isDeadlinePassed(String? deadline) {
   if (deadline == null) return false;
   try {
-    final deadlineDate = DateFormat('yyyy-MM-dd').parse(deadline);
-    return deadlineDate.isBefore(DateTime.now());
+    final deadlineDate = parseApiDate(deadline);
+    return deadlineDate!.isBefore(DateTime.now());
   } catch (e) {
     return false;
   }
 }
 
 String formatDate(String? date) {
-  if (date == null) return '';
-  try {
-    final parsed = DateTime.parse(date);
-    return DateFormat('MMM dd, yyyy').format(parsed);
-  } catch (e) {
-    return date;
-  }
+  final parsed = parseApiDate(date);
+
+  if (parsed == null) return '';
+
+  return DateFormat('MMM dd, yyyy').format(parsed);
 }
 
 int daysUntilDeadline(String? deadline) {
-  if (deadline == null) return 0;
-  try {
-    final now = DateTime.now();
-    final due = DateTime.parse(deadline);
-    return due.difference(now).inDays.clamp(0, 9999);
-  } catch (e) {
-    return 0;
-  }
+  final due = parseApiDate(deadline);
+
+  if (due == null) return 0;
+
+  final now = DateTime.now();
+
+  final today = DateTime(now.year, now.month, now.day);
+  final dueDate = DateTime(due.year, due.month, due.day);
+
+  return dueDate.difference(today).inDays;
 }
 
 String deadlineLabel(String? deadline) {
   if (deadline == null) return "No deadline";
+
   try {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final due = DateTime.parse(deadline);
     final dueDate = DateTime(due.year, due.month, due.day);
-
     final diff = dueDate.difference(today).inDays;
 
     if (diff == 0) return "Today";
     if (diff == 1) return "Tomorrow";
     if (diff < 0) return "Expired";
     return "$diff days left";
+  } catch (e) {
+    return "Invalid date";
+  }
+}
+
+String deadlineLabel2(String? deadline) {
+  if (deadline == null || deadline.isEmpty) {
+    return "No deadline";
+  }
+
+  try {
+    final now = DateTime.now();
+
+    final today = DateTime(now.year, now.month, now.day);
+
+    // Parse dd-MM-yyyy format
+    final dateTime = parseApiDate(deadline);
+    if (dateTime == null) {
+      return "Invalid date";
+    }
+    // final due = DateFormat('MMM dd, yyyy').parse(deadline);
+
+    final dueDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+    final diff = dueDate.difference(today).inDays;
+
+    if (diff == 0) return "Today";
+    if (diff == 1) return "Tomorrow";
+    if (diff > 1) return "$diff days left";
+
+    final expiredDays = diff.abs();
+
+    if (expiredDays == 1) return "Expired yesterday";
+
+    return "Expired $expiredDays days ago";
   } catch (e) {
     return "Invalid date";
   }
@@ -315,6 +350,7 @@ double calculateTimelineProgress(String? startDate, String? endDate) {
   try {
     final now = DateTime.now();
     final start = DateTime.parse(startDate);
+
     final end = DateTime.parse(endDate);
 
     if (now.isAfter(end)) return 1.0;
@@ -328,8 +364,30 @@ double calculateTimelineProgress(String? startDate, String? endDate) {
   }
 }
 
+double calculateTimelineProgress2(String? startDate, String? endDate) {
+  final start = parseApiDate(startDate);
+  final end = parseApiDate(endDate);
+
+  if (start == null || end == null) {
+    return 0.0;
+  }
+
+  final now = DateTime.now();
+
+  if (now.isBefore(start)) return 0.0;
+  if (now.isAfter(end)) return 1.0;
+
+  final total = end.difference(start).inMilliseconds;
+
+  if (total <= 0) return 0.0;
+
+  final elapsed = now.difference(start).inMilliseconds;
+
+  return (elapsed / total).clamp(0.0, 1.0);
+}
+
 Color getTimelineColor(String? startDate, String? endDate) {
-  final progress = calculateTimelineProgress(startDate, endDate);
+  final progress = calculateTimelineProgress2(startDate, endDate);
   if (progress > 0.9) return Colors.red.shade400;
   if (progress > 0.7) return Colors.orange.shade400;
   return Colors.green.shade400;
@@ -418,12 +476,20 @@ void showMoreData(String desc) {
   );
 }
 
-String getRelativeDate(String dateString) {
-  DateFormat format = DateFormat("dd-MM-yyyy hh:mm:ss a");
-  DateTime dateTime = format.parse(dateString);
+String getRelativeDate(String? dateString) {
+  final dateTime = parseApiDate(dateString);
 
-  DateTime now = DateTime.now();
-  Duration difference = now.difference(dateTime);
+  if (dateTime == null) {
+    return "Invalid date";
+  }
+
+  final now = DateTime.now();
+
+  // Remove time part for accurate Today/Yesterday comparison
+  final today = DateTime(now.year, now.month, now.day);
+  final inputDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+  final difference = today.difference(inputDate);
 
   if (difference.inDays == 0) {
     return "Today";
@@ -438,6 +504,25 @@ String getRelativeDate(String dateString) {
   } else {
     return "${(difference.inDays / 365).floor()} years ago";
   }
+}
+
+DateTime? parseApiDate(String? date) {
+  if (date == null || date.trim().isEmpty) return null;
+
+  final formats = [
+    DateFormat('MMM dd, yyyy hh:mm a'), // Apr 22, 2026 07:34 PM
+    DateFormat('dd-MM-yyyy hh:mm:ss a'), // 08-05-2026 05:33:05 PM
+    DateFormat('MMM dd, yyyy'), // May 07, 2026
+    DateFormat('dd-MM-yyyy'), // 11-05-2026
+  ];
+
+  for (final format in formats) {
+    try {
+      return format.parse(date);
+    } catch (_) {}
+  }
+
+  return null;
 }
 
 Future<void> openMap(String latlng) async {
@@ -467,7 +552,6 @@ Widget legend(String text, Color color) {
     ],
   );
 }
-
 
 Color hexToColor(String hex) {
   final buffer = StringBuffer();
