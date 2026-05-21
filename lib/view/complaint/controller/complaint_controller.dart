@@ -62,6 +62,9 @@ class ComplaintController extends GetxController {
       );
       if (res['common']['status'] == true) {
         complaintList.value = res['data'] ?? [];
+
+        // print('complaintList');
+        // print(complaintList);
       }
     } catch (e) {
       showToastNormal('Something went wrong. Please try again later.');

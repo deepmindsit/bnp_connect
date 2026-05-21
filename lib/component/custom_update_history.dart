@@ -118,7 +118,7 @@ class UpdateHistoryList extends StatelessWidget {
                     padding: EdgeInsets.all(4.r),
                     margin: EdgeInsets.all(4.r),
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(4.r),
                     ),
                     child: CustomText(
@@ -136,7 +136,7 @@ class UpdateHistoryList extends StatelessWidget {
                     padding: EdgeInsets.all(4.r),
                     margin: EdgeInsets.all(4.r),
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: Colors.grey,
                       borderRadius: BorderRadius.circular(4.r),
                     ),
                     child: CustomText(

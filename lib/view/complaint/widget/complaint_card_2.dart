@@ -43,7 +43,8 @@ class ComplaintCard2 extends StatelessWidget {
                   _buildLocationSection(),
                   // SizedBox(height: 16.h),
                   _buildFooter(),
-                  _buildTimeLine(data),
+                  if (status != 'Completed' && status != 'Rejected')
+                    _buildTimeLine(data),
                 ],
               ),
             ),

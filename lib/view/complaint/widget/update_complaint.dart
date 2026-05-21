@@ -477,12 +477,28 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
           onPressed: () async {
             if (controller.formKey.currentState!.validate()) {
               if (controller.isComplaintLoading.isFalse) {
-                await controller.addComplaintComment(
-                  Get.arguments['id'].toString(),
-                );
+                if (controller.complaintDetails['department_id'].toString() ==
+                    '1') {
+                  if (controller.newAttachments.isEmpty) {
+                    Get.snackbar(
+                      'Attachment Required',
+                      'Please upload an attachment.',
+                    );
+                    return;
+                  }
+
+                  await controller.addComplaintComment(
+                    Get.arguments['id'].toString(),
+                  );
+                } else {
+                  await controller.addComplaintComment(
+                    Get.arguments['id'].toString(),
+                  );
+                }
               }
             }
           },
+
           backgroundColor: primaryColor,
           text: 'Update',
           width: 0.8.sw,
