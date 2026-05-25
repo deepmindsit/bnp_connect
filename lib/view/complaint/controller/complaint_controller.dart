@@ -123,6 +123,7 @@ class ComplaintController extends GetxController {
     try {
       final res = await _apiService.getStatus(userId);
       if (res['common']['status'] == true) {
+        print(res['data']);
         statusList.value = res['data'] ?? [];
         departments.value = res['user']['department'] ?? [];
       } else {

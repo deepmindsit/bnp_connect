@@ -478,7 +478,8 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
             if (controller.formKey.currentState!.validate()) {
               if (controller.isComplaintLoading.isFalse) {
                 if (controller.complaintDetails['department_id'].toString() ==
-                    '1') {
+                        '1' &&
+                    controller.selectedStatus.value.toString() == '3') {
                   if (controller.newAttachments.isEmpty) {
                     Get.snackbar(
                       'Attachment Required',
